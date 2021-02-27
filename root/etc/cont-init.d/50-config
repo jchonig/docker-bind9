@@ -1,0 +1,51 @@
+#!/usr/bin/with-contenv bash
+
+print_vars () {
+    if [ -n "${1}" ]; then
+	title=" ${1}"
+    else
+	title=""
+    fi
+    echo "Environment${title}:"
+    echo "    HOME=${HOME}"
+    echo "    PUID=${PUID}"
+    echo "    PGID=${PGID}"
+    echo "    TZ=${TZ}"
+}
+
+print_vars
+
+#
+#	Switch from abc to bind
+#
+PUID=${PUID:-$(id -u abc)}
+PGID=${PGID:-$(id -g abc)}
+
+DIRS="/var/cache/bind /etc/bind"
+find ${DIRS} -user bind -exec chown ${PUID} \{\} \;
+find ${DIRS} -group bind -exec chgrp ${PGID} \{\} \;
+
+userdel abc
+
+groupmod -o -g "$PGID" bind
+usermod -o -u "$PUID" bind
+
+#
+#	Fix our config dir
+#
+cd /config
+for path in /etc/bind/*; do
+    file=$(basename ${path})
+    test -f ${file} || ln -sf ${path} .
+done
+cd /config
+chown root.bind rndc.key
+
+chmod g+w /etc/bind
+
+#
+#	Set up for pid file
+#
+mkdir -p /var/run/named
+chmod 775 /var/run/named
+chown root:bind /var/run/named >/dev/null 2>&1 || true
