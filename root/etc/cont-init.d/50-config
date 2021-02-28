@@ -38,10 +38,16 @@ for path in /etc/bind/*; do
     file=$(basename ${path})
     test -f ${file} || ln -sf ${path} .
 done
-cd /config
-chown root.bind rndc.key
+chmod g+w /config
+chown root:bind rndc.key
 
-chmod g+w /etc/bind
+
+#
+#	Set up state directory
+#
+mkdir -p /var/named
+chmod 775 /var/named
+chown root:bind /var/named >/dev/null 2>&1 || true
 
 #
 #	Set up for pid file

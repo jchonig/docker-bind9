@@ -21,11 +21,14 @@ services:
       - TZ=Europe/London
     volumes:
 	  - PATHTO/config:/config
-	  - ...
+	  - run:/var/run
 	ports:
 	  - 53:53
 	  - 53:53/udp
     restart: unless-stopped
+
+volumes:
+  run:
 ```
 
 # Parameters
@@ -40,9 +43,10 @@ services:
 
 ## Volume Mappings (-v)
 
-| Volume  | Function                                |
-| ------  | --------                                |
-| /config | Configuration (normally found in /etc/bind) |
+| Volume   | Function                                               |
+| ------   | --------                                               |
+| /config  | Configuration (normally found in /etc/bind)            |
+| /var/run | A named volume can be use to persist state in this dir |
 
 ## Application setup
   + Any file in /etc/bind that does not exist in /config is make a
