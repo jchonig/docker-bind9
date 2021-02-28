@@ -6,6 +6,7 @@ RUN \
 	echo "**** install packages ****" && \
 	apt-get update && \
 	apt-get install -y --no-install-recommends \
+                inotify-tools \
 		bind9 \
 		bind9-host \
 		dnsutils && \

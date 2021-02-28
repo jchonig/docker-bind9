@@ -48,7 +48,5 @@ services:
   + Any file in /etc/bind that does not exist in /config is make a
     symlink to /etc/bind.  This allows referencing of default
     configuration files w/o.
-
-## TODO
-  + [ ] Reload config if any files in /config change
-     + Add cron, a cronjob and a script
+  + Any changes in the /config directory will cause a named to be
+    reloaded.
