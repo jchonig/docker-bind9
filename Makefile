@@ -1,17 +1,19 @@
+IMAGE=bind9
+TAG=devel
 
 all: build
 
 build:
-	docker build -t bind9  .
+	docker build -t ${IMAGE}:${TAG}  .
 
 test: build
-	docker run -v ${PWD}/named:/var/named -v ${PWD}/config:/config -p 53:53 -p 53:53/udp bind9
+	docker run -v ${PWD}/named:/var/named -v ${PWD}/config:/config -p 53:53 -p 53:53/udp ${IMAGE}:${TAG}
 
 # Run the container with just a bash shell
-run-bash:
-	docker run -v ${PWD}/named:/var/named  -v ${PWD}/config:/config -it --ecdntrypoint /bin/bash bind9
+run-bash: build
+	docker run -v ${PWD}/named:/var/named  -v ${PWD}/config:/config -it --ecdntrypoint /bin/bash ${IMAGE}:${TAG}
 
 # Start the container and run a bash shell
-exec-bash:
-	docker run -v ${PWD}/named:/var/named  -v ${PWD}/config:/config -it bind9 /bin/bash
+exec-bash: build
+	docker run -v ${PWD}/named:/var/named  -v ${PWD}/config:/config -it ${IMAGE}:${TAG} /bin/bash
 
