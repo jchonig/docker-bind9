@@ -3,6 +3,10 @@
 while inotifywait -s -q -r /config -e attrib,modify,move,create,delete; do
     # Sleep a couple seconds in case more than one file is updated
     sleep 5
-    # Reload named
-    rndc reload
+    # Perform action
+    if [[ -e /config/notify_action ]]; then
+	. /config/notify_action
+    else
+	rndc reload
+    fi
 done
