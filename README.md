@@ -2,6 +2,8 @@
 
 A docker container to run ISC nameserver
 
+Image hosted at: `ghcr.io/jchonig/bind9`
+
 # Usage
 
 ### docker-compose
@@ -13,7 +15,7 @@ Compatible with docker-compose v3 schemas.
 version: "3"
 services:
   bind9:
-    image: jchonig/bind9
+    image: ghcr.io/jchonig/bind9
     container_name: bind9
     environment:
       - PUID=1000
